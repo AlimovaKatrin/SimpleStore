@@ -2,24 +2,31 @@ const graphql = require('graphql');
 
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList } = graphql;
 
-const Products = require('../models/product');
+const Food = require('../models/product');
+
+//
+// ────────────────────────────────────────────── DESCRIBE DATA FROM DATABASE ─────
+//
 
 const ProductType = new GraphQLObjectType({
-    name: 'Product',
+    name: 'Food',
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString }
     })
 });
 
+//
+// ────────────────────────────────────── MAIN QUERY THAT CONTAINS SUB-QUERIES ─────
+//
+
 const Query = new GraphQLObjectType({
     name: 'Query',
     fields: {
-        product: {
-            type: ProductType,
-            args: { id: { type: GraphQLID } },
+        food: {
+            type: new GraphQLList(ProductType),
             resolve(parent, args) {
-                return Products.find({})
+                return Food.find({})
             }
         }
     }
@@ -27,12 +34,4 @@ const Query = new GraphQLObjectType({
 
 module.exports = new GraphQLSchema({
     query: Query,
-
-    products: {
-        type: new GraphQLList(ProductType),
-        resolve(parent, args) {
-            return Products.find({})
-        }
-    }
-
 });

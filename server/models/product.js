@@ -5,3 +5,4 @@ const productSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('Food',productSchema)
+
