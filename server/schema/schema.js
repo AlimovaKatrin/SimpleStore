@@ -32,6 +32,45 @@ const Query = new GraphQLObjectType({
     }
 });
 
+//
+// ───────────────────────────────────────────────────────────────── MUTATION ─────
+//
+
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        addFood: {
+            type: ProductType,
+            args: {
+                name: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return Food.create({ name: args.name });
+            }
+        },
+        deleteFood: {
+            type: ProductType,
+            args: {
+                name: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return Food.findOneAndDelete({ name: args.name });
+            }
+        },
+        updateFood: {
+            type: ProductType,
+            args: {
+                name: { type: GraphQLString },
+                change: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return Food.findOneAndUpdate({ name: args.name }, { name: args.change })
+            }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
     query: Query,
+    mutation: Mutation
 });
